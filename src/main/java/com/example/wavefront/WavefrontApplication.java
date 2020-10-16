@@ -1,5 +1,6 @@
 package com.example.wavefront;
 
+import io.micrometer.core.instrument.config.MeterFilter;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -47,6 +48,16 @@ public class WavefrontApplication {
 					.thenMany(reservationRepository.findAll())
 					.subscribe(System.out::println);
 		};
+	}
+
+	//@Bean
+	MeterFilter jvmInclusionFilter() {
+		return MeterFilter.acceptNameStartsWith("jvm.classes");
+	}
+
+	//@Bean
+	MeterFilter jvmExclusionFilter() {
+		return MeterFilter.denyUnless(id -> id.getName().startsWith("jvm.classes"));
 	}
 
 }
